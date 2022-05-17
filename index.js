@@ -30,12 +30,9 @@ app.get("/", function (req, res) {
 app.get("/capes/:username", function (req, res) {
 	var user = req.params.username;
 	if (user.toLowerCase().endsWith(".png")) user = user.substring(0, user.length - 4);
-	//var url = "http://" + getNodeIp() + "/get/cloak?user=" + user + "&optifine=show&migrator=replace";
-	var url = "http://" + getNodeIp() + "/get/cloak?user=" + user + "&migrator=replace";
-	//var url = "http://" + getNodeIp() + "/get/cloak?user=notch&optifine=show&migrator=replace";
-	//console.log(url);
+	var url = "http://" + getNodeIp() + "/get/cloak?user=" + user + "&optifine=show";
 	var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-	//cacheUserIp(ip);
+	cacheUserIp(ip);
 	res.redirect(301, url); // i tried this for ages in fastify and optifine wouldn't pick it up. giving up... for now
 });
 
