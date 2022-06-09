@@ -27,24 +27,29 @@ app.get("/", function (req, res) {
   res.send("Cosmetica has been installed!");
 });
 
-app.get("/capes/:username", function (req, res) {
+app.get("/capes/:username", function (req, res) { // optifine
 	var user = req.params.username;
 	if (user.toLowerCase().endsWith(".png")) user = user.substring(0, user.length - 4);
 	var url = "http://" + getNodeIp() + "/get/cloak?user=" + user + "&optifine=show";
 	var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-	cacheUserIp(ip);
 	res.redirect(301, url); // i tried this for ages in fastify and optifine wouldn't pick it up. giving up... for now
 });
 
-function cacheUserIp(ip) {
-	if (Object.keys(cachedIps).includes(ip)) return;
-	cachedIps[ip] = setTimeout(function() {
-		delete cachedIps[ip];
-	}, 60 * 1000);
-	var base64 = Buffer.from(ip).toString("base64");
-	var url = "https://api.cosmetica.cc/client/registerip?ipcacheaddress=" + base64 + "&ipcachepassword=" + config.ipCachePassword;
-	request(url);
-}
+app.get("/MinecraftCloaks/:username", function (req, res) { // old minecraft
+	var user = req.params.username;
+	if (user.toLowerCase().endsWith(".png")) user = user.substring(0, user.length - 4);
+	var url = "http://" + getNodeIp() + "/get/cloak?user=" + user + "&optifine=show";
+	var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+	res.redirect(301, url); // i tried this for ages in fastify and optifine wouldn't pick it up. giving up... for now
+});
+
+app.get("/MinecraftSkins/:username", function (req, res) { // old minecraft
+	var user = req.params.username;
+	if (user.toLowerCase().endsWith(".png")) user = user.substring(0, user.length - 4);
+	var url = "http://" + getNodeIp() + "/get/skin?user=" + user + "&optifine=show";
+	var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+	res.redirect(301, url); // i tried this for ages in fastify and optifine wouldn't pick it up. giving up... for now
+});
 
 app.listen(80, function() {
 	console.log("Server has started!");
