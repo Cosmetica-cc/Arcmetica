@@ -24,7 +24,7 @@ function getNodeIp() {
 }
 
 app.get("/", function (req, res) {
-  res.send("Cosmetica has been installed!");
+  res.send("Cosmetica has been installed! Nice.");
 });
 
 app.get("/capes/:username", function (req, res) { // optifine
