@@ -14,7 +14,7 @@ console.log("d8'          `8b 88          `\"Ybbd8\"' 88      88      88  `\"Ybb
 
 const nodes = [ // optifine is really fickle and won't accept the ip of the nodebalancer, randomly dispersing queries between nodes manually instead
 	"172.105.135.43", // node 1
-	"172.105.159.99", // node 2
+	//"172.105.159.99", // node 2
 	"170.187.157.120" // node 3
 ];
 
