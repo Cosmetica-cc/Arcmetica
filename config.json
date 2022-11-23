@@ -1,3 +1,6 @@
 {
-	"ipCachePassword": ""
+	"thirdParties": {
+		"optifine": "show"
+	},
+	"port": 80
 }

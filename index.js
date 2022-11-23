@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const request = require("request");
+const path = require("path");
 const config = require("./config.json");
 
 console.log("\n\n       db                                                                    88                      ")
@@ -18,41 +18,62 @@ const nodes = [ // optifine is really fickle and won't accept the ip of the node
 	"170.187.157.120" // node 3
 ];
 
-var cachedIps = new Object;
-
 function getNodeIp() {
 	return nodes[Math.floor(Math.random() * nodes.length)];
 }
 
-app.get("/", function(req, res) {
-  res.send("Cosmetica has been installed! Nice.");
+function generateCapeEnding() {
+	let out = "";
+	Object.keys(config.thirdParties).forEach(item => {
+		out += `&${item}=${config.thirdParties[item]}`;
+	});
+	return out;
+}
+
+function isPrivateIP(ip) {
+	if (!ip.includes(".")) return false;
+	var parts = ip.split(".");
+	return parts[0] == "127" || parts[0] == "10" || (parts[0] == "172" && (parseInt(parts[1], 10) >= 16 && parseInt(parts[1], 10) <= 31)) || (parts[0] == "192" && parts[1] == "168");
+}
+
+app.get("/", (req, res) => {
+	let host = req.headers.host;
+	if (host.includes(":")) host = host.split(":")[0];
+	let page = "normal";
+	switch (host) {
+		case "s.optifine.net":
+			page = "installed";
+			break;
+		case "localhost":
+			page = "local";
+			break;
+	}
+	if (isPrivateIP(host)) page = "local";
+  	res.sendFile(path.join(__dirname, "pages", page + ".html"));
 });
 
-app.get("/capes/:username", function(req, res) { // optifine
+app.get("/capes/:username", (req, res) => { // optifine
 	var user = req.params.username;
 	if (user.toLowerCase().endsWith(".png")) user = user.substring(0, user.length - 4);
-	var url = "http://" + getNodeIp() + "/get/cloak?user=" + user + "&optifine=show";
-	var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+	var url = "http://" + getNodeIp() + "/get/cloak?user=" + user + generateCapeEnding();
 	res.redirect(302, url); // i tried this for ages in fastify and optifine wouldn't pick it up. giving up... for now
 });
 
-app.get("/MinecraftCloaks/:username", function(req, res) { // old minecraft
+app.get("/MinecraftCloaks/:username", (req, res) => { // old minecraft
 	var user = req.params.username;
 	if (user.toLowerCase().endsWith(".png")) user = user.substring(0, user.length - 4);
-	var url = "http://" + getNodeIp() + "/get/cloak?user=" + user + "&optifine=show";
-	var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+	var url = "http://" + getNodeIp() + "/get/cloak?user=" + user + generateCapeEnding();
 	res.redirect(302, url); // i tried this for ages in fastify and optifine wouldn't pick it up. giving up... for now
 });
 
-app.get("/MinecraftSkins/:username", function(req, res) { // old minecraft
+app.get("/MinecraftSkins/:username", (req, res) => { // old minecraft
 	var user = req.params.username;
 	if (user.toLowerCase().endsWith(".png")) user = user.substring(0, user.length - 4);
-	var url = "http://" + getNodeIp() + "/get/skin?user=" + user + "&optifine=show";
-	var ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+	var url = "http://" + getNodeIp() + "/get/skin?user=" + user + generateCapeEnding();
 	res.redirect(302, url); // i tried this for ages in fastify and optifine wouldn't pick it up. giving up... for now
 });
 
-app.get("/items/:type/:id/:resource", function(req, res) { // cosmetic
+app.get("/items/:type/:id/:resource", (req, res) => { // cosmetic
 	var type = req.params.type;
 	var id = req.params.id;
 	var resource = req.params.resource;
@@ -61,7 +82,7 @@ app.get("/items/:type/:id/:resource", function(req, res) { // cosmetic
 	res.redirect(302, url);
 });
 
-app.get("/users/:username", function(req, res) {
+app.get("/users/:username", (req, res) => {
 	var username = req.params.username;
 	if (username.toLowerCase().endsWith(".cfg")) {
 		username = username.substring(0, username.length - 4);
@@ -70,6 +91,8 @@ app.get("/users/:username", function(req, res) {
 	res.redirect(302, url);
 });
 
-app.listen(80, function() {
-	console.log("Server has started!");
+app.use("/static", express.static("static"));
+
+app.listen(config.port, () => {
+	console.log("Server has started on port " + config.port);
 });

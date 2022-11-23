@@ -1,0 +1,116 @@
+:root {
+	--accent-color: #fcba03;
+	--pp-color: #55FFFF;
+	--p-color: #00AAAA;
+	--accent-text-color: #000;
+	--background-color: #171717;
+	--footer-background-color: #242424;
+	--off-background-color: #242424;
+	--text-color: #fff;
+	--link-color: #3a8ec2;
+	--popup-background-color: #171717;
+	--popup-darkener-color: rgba(0,0,0,0.5);
+	--popup-text-color: #fff;
+	--switch-background-color: #474747;
+	--switch-hover-background-color: #636363;
+	--footer-text-color: rgb(100,100,100);
+	--viewer-background: #000;
+	--approval-message: #f00;
+	--outline-color: rgb(150,150,150);
+	--icon-filters: invert(1);
+	--footer-icon-filters: invert(0.5);
+	--background-loading-color: var(--accent-color);
+
+	--download-button-color: #327ba8;
+	--like-button-color: #f5425a;
+	--rotate-button-color: #474747;
+	--danger-button-color: #de1616;
+	--danger-button-text-color: #000;
+}
+
+body, html {
+    margin: 0;
+    background: #fff;
+    font-family: Verdana;
+	height: 100%;
+	color: var(--text-color);
+}
+
+body::after {
+	content: "";
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: url('/static/background.jpg');
+	background-position: center;
+	background-size: cover;
+	filter: brightness(0.3);
+}
+
+::selection {
+	color: var(--accent-text-color);
+	background-color: var(--accent-color);
+}
+
+@font-face {
+	font-family: Verdana;
+	src: url("https://cosmetica.cc/page/Verdana.ttf");
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: Verdana;
+	src: url("https://cosmetica.cc/page/Verdana Bold.ttf");
+	font-weight: bold;
+}
+
+.body {
+	display: flex;
+	min-height: calc(100% - 70px);
+	align-items: center;
+	position: relative;
+	z-index: 1;
+}
+
+.body > div {
+	width: 100%;
+}
+
+h1, h2 {
+	text-align: center;
+}
+
+h1 {
+	font-size: 3rem;
+}
+
+h2 {
+	font-size: 2rem;
+}
+
+p {
+	padding: 20px;
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 1.5rem;
+}
+
+a {
+	color: var(--link-color);
+}
+
+.call-to-action {
+	border: 2px solid var(--outline-color);
+}
+
+.footer {
+	height: 70px;
+	position: relative;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
